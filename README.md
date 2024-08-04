@@ -18,7 +18,6 @@
 - https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-main/docs/try-flink-kubernetes-operator/quick-start/
 - https://diogodssantos.medium.com/unlocking-the-power-of-flink-with-kubernetes-operator-simplify-data-management-for-daas-cf0fe0c1485b
 - https://github.com/apache/flink-kubernetes-operator/tree/main/examples/flink-sql-runner-example
-- https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.5/docs/custom-resource/overview/
 - https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-main/docs/custom-resource/overview/ 
 
 ## Quickstart
