@@ -8,9 +8,10 @@
     - [Deploy MinIO](#deploy-minio)
     - [Deploy S3 backed Flink with basic job](#deploy-s3-backed-flink-with-basic-job)
   - [SQL Runner](#sql-runner)
-  - [Standalone Deployment](#standalone-deployment)
+  - [Session Deployment](#session-deployment)
     - [Flink SQL Shell](#flink-sql-shell)
     - [Jar Based Job](#jar-based-job)
+  - [Persisted Catalogs](#persisted-catalogs)
   - [Cleanup](#cleanup)
 
 ## References
@@ -20,6 +21,7 @@
 - https://github.com/apache/flink-kubernetes-operator/tree/main/examples/flink-sql-runner-example
 - https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.5/docs/custom-resource/overview/
 - https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-main/docs/custom-resource/overview/ 
+- https://github.com/decodableco/examples/tree/main/catalogs/flink-iceberg-hive 
 
 ## Quickstart
 
@@ -124,7 +126,7 @@ Check everything is ready:
 kubectl get pods -n minio-dev
 ```
 
-Let's expose REST API:
+Let's define the rest service for minio and install ingress:
 
 ```shell
 kubectl -n minio-dev create -f ./minio-rest.yaml
@@ -296,7 +298,7 @@ Clean up:
 kind delete cluster
 ```
 
-## Standalone Deployment
+## Session Deployment
 
 As before:
 - **Start Ingress Ready Cluster** as before.
@@ -317,10 +319,10 @@ We confirm everything is ready:
 kubectl -n flink-operator get all
 ```
 
-And we can install our standalone flink (we are not using any locally built docker image now):
+And we can install our session cluster (we are not using any locally built docker image now):
 
 ```shell
-kubectl create -f ./flink-standalone.yaml
+kubectl create -f ./flink-session.yaml
 ```
 
 Now we are not installing any job together with our cluster. And in here we are expliciting using `mode: standalone`.
@@ -392,6 +394,100 @@ Now use this `StateMachineExample.jar` when submitting the job on `Submit New Jo
 Once uploaded we click on the jar and hit `Submit`.
 
 Under `Running Jobs` in the dashboard you should see now the 2 jobs running: one from the SQL shell and the other from the jar.
+
+## Persisted Catalogs
+
+Again:
+- **Start Ingress Ready Cluster** as before.
+- **Deploy MinIO** also as before.
+
+Now we build our docker image for Hive Metastore:
+
+```shell
+cd hms-s3
+DOCKER_BUILDKIT=1 docker build . -t hms-s3:latest
+cd ..
+```
+
+Now for deploying our custom standalone HMS we first load our local image into kind:
+
+```shell
+kind load docker-image hms-s3:latest
+```
+
+Let's create the namespace and deploy HMS:
+
+```shell
+kubectl create ns hms-dev
+kubectl -n hms-dev create -f ./hms.yaml
+```
+
+Check everything is ready:
+
+```shell
+kubectl get pods -n hms-dev
+```
+
+Let's define the thrift service for hms:
+
+```shell
+kubectl -n hms-dev create -f ./hms-rest.yaml
+```
+
+Now we do basically the same to our hive enabled custom flink image:
+
+```shell
+cd flink
+DOCKER_BUILDKIT=1 docker build . -t flink-hive-s3-custom:latest
+cd ..
+```
+
+And load our local image into kind:
+
+```shell
+kind load docker-image flink-hive-s3-custom:latest
+```
+
+
+
+As before for Flink Operator:
+
+```shell
+kubectl create ns flink-operator
+kubectl create ns flink-jobs
+helm repo add flink-kubernetes-operator https://archive.apache.org/dist/flink/flink-kubernetes-operator-1.9.0/
+helm -n flink-operator install -f values.yaml flink-kubernetes-operator flink-kubernetes-operator/flink-kubernetes-operator --set webhook.create=false
+```
+
+Confirm everything is ready:
+
+```shell
+kubectl -n flink-operator get all
+```
+
+Install our session cluster backed by hms for catalogs:
+
+```shell
+kubectl create -f ./flink-session-persisted.yaml
+```
+
+Let's check is ready:
+
+```shell
+kubectl -n flink-jobs get pods
+```
+
+Using the pod name as before to open a shell:
+
+```shell
+k exec -n flink-jobs -it basic-example-1-57bc4d98d7-bvd9b -- bash
+```
+
+And after open the Flink SQL shell:
+
+```shell
+./bin/sql-client.sh
+```
 
 ## Cleanup
 

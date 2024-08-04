@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: hms
+  name: deploy-hms
+  namespace: hms-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hms
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: hms
+    spec:
+      containers:
+      - name: hms
+        image: hms-s3:latest
+        imagePullPolicy: Never
+status: {}
