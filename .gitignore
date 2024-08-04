@@ -1,1 +1,6 @@
 .DS_Store
+
+flink-kubernetes-operator
+cloned-flink-kubernetes-operator
+
+StateMachineExample.jar

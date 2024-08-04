@@ -1,0 +1,7 @@
+operatorServiceAccount:
+  create: true
+  annotations: {}
+  name: "flink-operator"
+
+watchNamespaces: 
+    - "flink-jobs"
