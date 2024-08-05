@@ -36,13 +36,14 @@ spec:
       serviceAccount: flink
       containers:
         - name: flink-main-container
+          imagePullPolicy: Never 
           env:
             - name: ENABLE_BUILT_IN_PLUGINS
               value: flink-s3-fs-presto-1.18.1.jar
           volumeMounts:
             - mountPath: /opt/flink/data
               name: flink-data
-          command: [ 'sh','-c','curl https://repo1.maven.org/maven2/org/apache/flink/flink-sql-connector-hive-3.1.3_2.12/1.18.1/flink-sql-connector-hive-3.1.3_2.12-1.18.1.jar -o ./lib/hive/flink-sql-connector-hive-3.1.3_2.12-1.18.1.jar' ]
+          command: [ 'sh','-c','curl https://raw.githubusercontent.com/rjmfernandes/FlinkK8s/main/flink/conf/hive-site.xml -o ./conf/hive-site.xml' ]
       volumes:
         - name: flink-data
           emptyDir: { }
