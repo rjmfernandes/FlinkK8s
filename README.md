@@ -374,13 +374,13 @@ INSERT INTO print_table SELECT * FROM orders;
 List the tables on your default catalog/database;
 
 ```sql
-show tables;
+SHOW TABLES;
 ```
 
 Open in another terminal following the same steps another Flink SQL shell in the pod and execute again:
 
 ```sql
-show tables;
+SHOW TABLES;
 ```
 
 As you see the tables created by us on first sql session are not available in another session since they only exist in memory for that specific session.
@@ -462,8 +462,6 @@ And load our local image into kind:
 kind load docker-image flink-hive-s3-custom:latest
 ```
 
-
-
 As before for Flink Operator:
 
 ```shell
@@ -502,6 +500,66 @@ And after open the Flink SQL shell:
 ```shell
 ./bin/sql-client.sh
 ```
+
+And now we execute:
+
+```sql
+CREATE CATALOG myhive WITH (
+   'type' = 'hive',
+   'hive-conf-dir' = './lib'
+ );
+```
+
+```sql
+USE CATALOG myhive;
+```
+
+```sql
+CREATE TABLE orders (
+  order_number BIGINT,
+  price        DECIMAL(32,2),
+  buyer        ROW<first_name STRING, last_name STRING>,
+  order_time   TIMESTAMP(3)
+) WITH (
+  'connector' = 'datagen'
+);
+```
+
+```sql
+CREATE TABLE print_table WITH ('connector' = 'print')
+  LIKE orders;
+```
+
+```sql
+SHOW TABLES;
+```
+
+Now we can open another FLINK SQL shell in another terminal and again:
+
+```sql
+CREATE CATALOG myhive WITH (
+   'type' = 'hive',
+   'hive-conf-dir' = './lib'
+ );
+```
+
+```sql
+USE CATALOG myhive;
+```
+
+```sql
+SHOW TABLES;
+```
+
+As one can see now for the hive catalog we can see table definition are persisted and available for anyone connecting to same Flink catalog.
+
+We can in fact execute form this terminal the statement:
+
+```sql
+SELECT * FROM orders;
+```
+
+And check the running job at: http://localhost/flink-jobs/basic-example-1/#/job/running
 
 ## Cleanup
 
