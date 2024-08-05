@@ -20,7 +20,7 @@ likely need to add a number of new values. -->
 <configuration>
   <property>
     <name>metastore.thrift.uris</name>
-    <value>thrift://hms-svc.hms:9083</value>
+    <value>thrift://hms-svc.hms-dev:9083</value>
   </property>
   <!-- Add Materialization stuff for standalone metastore -->
   <property>
@@ -41,25 +41,5 @@ likely need to add a number of new values. -->
     <name>javax.jdo.option.ConnectionDriverName</name>
     <value>org.apache.derby.jdbc.EmbeddedDriver</value>
   </property>
-
-    <property>
-        <name>fs.s3a.access.key</name>
-        <value>minioadmin</value>
-    </property>
-
-    <property>
-        <name>fs.s3a.secret.key</name>
-        <value>minioadmin</value>
-    </property>
-
-    <property>
-        <name>fs.s3a.endpoint</name>
-        <value>http://minio-svc.minio-dev:9000</value>
-    </property>
-
-    <property>
-        <name>fs.s3a.path.style.access</name>
-        <value>true</value>
-    </property>
 
 </configuration>

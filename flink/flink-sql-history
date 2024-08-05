@@ -1,4 +1,4 @@
-1706886897423:CREATE CATALOG c_hive WITH (\n        'type' = 'hive',\n        'catalog-type'='hive',\n        'warehouse' = 's3a://test/hive',\n        'hive-conf-dir' = './conf');
+1706886897423:CREATE CATALOG c_hive WITH (\n        'type' = 'hive',\n        'catalog-type'='hive',\n        'warehouse' = 's3a://test/hive',\n        'hive-conf-dir' = './lib');
 1706886897424:USE CATALOG c_hive;
 1706886897425:CREATE DATABASE db01;
 1706886897426:USE db01;

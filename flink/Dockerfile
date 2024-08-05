@@ -44,7 +44,7 @@ RUN echo "Purge build artifacts" && \
     rm -rf /var/lib/apt/lists/*
 
 # Set up Hive config
-COPY conf/hive-site.xml ./conf/hive-site.xml
+COPY conf/hive-site.xml ./lib/hive-site.xml
 # Pre-seed the SQL history because I'm nice like that
 COPY flink-sql-history /root/.flink-sql-history
 

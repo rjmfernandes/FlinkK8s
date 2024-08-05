@@ -20,7 +20,8 @@
 - https://diogodssantos.medium.com/unlocking-the-power-of-flink-with-kubernetes-operator-simplify-data-management-for-daas-cf0fe0c1485b
 - https://github.com/apache/flink-kubernetes-operator/tree/main/examples/flink-sql-runner-example
 - https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-main/docs/custom-resource/overview/ 
-- https://github.com/decodableco/examples/tree/main/catalogs/flink-iceberg-hive 
+- https://github.com/decodableco/examples/tree/main/catalogs/flink-iceberg-hive
+- https://github.com/criccomini/hive-metastore-standalone 
 
 ## Quickstart
 
@@ -369,6 +370,20 @@ CREATE TABLE print_table WITH ('connector' = 'print')
 ```sql
 INSERT INTO print_table SELECT * FROM orders;
 ```
+
+List the tables on your default catalog/database;
+
+```sql
+show tables;
+```
+
+Open in another terminal following the same steps another Flink SQL shell in the pod and execute again:
+
+```sql
+show tables;
+```
+
+As you see the tables created by us on first sql session are not available in another session since they only exist in memory for that specific session.
 
 Check the job executing in the Flink dashboard: http://localhost/flink-jobs/basic-example-1/#/job/running
 

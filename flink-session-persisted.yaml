@@ -16,11 +16,6 @@ spec:
     s3.access-key: minioadmin
     s3.secret-key: minioadmin
     execution.checkpointing.interval: "10000"
-    table.catalog.myhivecatalog.type: hive
-    table.catalog.myhivecatalog.default-database: default
-    table.catalog.myhivecatalog.hive-conf-dir: ./conf
-    table.default-catalog: myhivecatalog
-    table.default-database: default
   ingress:
     template: "/{{namespace}}/{{name}}(/|$)(.*)"
     className: "nginx"
@@ -36,14 +31,15 @@ spec:
       serviceAccount: flink
       containers:
         - name: flink-main-container
-          imagePullPolicy: Never 
           env:
             - name: ENABLE_BUILT_IN_PLUGINS
               value: flink-s3-fs-presto-1.18.1.jar
           volumeMounts:
             - mountPath: /opt/flink/data
               name: flink-data
-          command: [ 'sh','-c','curl https://raw.githubusercontent.com/rjmfernandes/FlinkK8s/main/flink/conf/hive-site.xml -o ./conf/hive-site.xml' ]
+#          command:
+#            - "touch"
+#            - "/tmp/test.txt"
       volumes:
         - name: flink-data
           emptyDir: { }
