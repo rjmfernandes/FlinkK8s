@@ -1,6 +1,7 @@
 # Flink K8s Operator
 
 - [Flink K8s Operator](#flink-k8s-operator)
+  - [Disclaimer](#disclaimer)
   - [References](#references)
   - [Quickstart](#quickstart)
   - [S3 Backed](#s3-backed)
@@ -13,6 +14,11 @@
     - [Jar Based Job](#jar-based-job)
   - [Persisted Catalogs](#persisted-catalogs)
   - [Cleanup](#cleanup)
+
+## Disclaimer
+
+The code and/or instructions here available are **NOT** intended for production usage. 
+It's only meant to serve as an example or reference and does not replace the need to follow actual and official documentation of referenced products.
 
 ## References
 
@@ -73,7 +79,7 @@ Now if we forward the jobmanager port:
 kubectl port-forward svc/basic-example-rest 8081
 ```
 
- We can check our job running (part of the local jar `/opt/flink/examples/streaming/StateMachineExample.jar` defined as job on our yaml https://raw.githubusercontent.com/apache/flink-kubernetes-operator/release-1.8/examples/basic.yaml):
+ We can check our job running (part of the local jar `/opt/flink/examples/streaming/StateMachineExample.jar` defined as job on our yaml https://raw.githubusercontent.com/apache/flink-kubernetes-operator/release-1.8/examples/basic.yaml ):
 
  http://localhost:8081/#/job/running
 
