@@ -397,12 +397,6 @@ Check the job executing in the Flink dashboard: http://localhost/flink-jobs/basi
 
 You can also use the Flink dashboard to `Submit New Job`.
 
-First let's copy the same original example jar from inside out job manager pod (replace the pod name biy the one applicable in your case):
-
-```shell
-kubectl cp -n flink-jobs basic-example-1-57bc4d98d7-9l5ps:/opt/flink/examples/streaming/StateMachineExample.jar ./StateMachineExample.jar
-```
-
 Considering the upload of the jar we will use the port-forward so we start by:
 
 ```shell
